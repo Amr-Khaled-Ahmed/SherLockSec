@@ -1,0 +1,25 @@
+#!/bin/bash
+# post-commit hook — runs commit-guard automatically after every commit.
+# Works under Git Bash on Windows and native bash/zsh on Linux/macOS,
+# since Git always executes hooks through its bundled sh/bash.
+# This file must be copied to .git/hooks/post-commit (no extension) and made executable.
+
+REPO_ROOT=$(git rev-parse --show-toplevel)
+SCANNER="$REPO_ROOT/.commit-guard/scan.py"
+
+if [ ! -f "$SCANNER" ]; then
+    echo "commit-guard: scan.py not found at $SCANNER"
+    exit 0
+fi
+
+# Prefer python3, fall back to python (Windows installs usually only have 'python').
+if command -v python3 >/dev/null 2>&1; then
+    PYBIN=python3
+elif command -v python >/dev/null 2>&1; then
+    PYBIN=python
+else
+    echo "commit-guard: no Python interpreter found on PATH. Skipping scan."
+    exit 0
+fi
+
+"$PYBIN" "$SCANNER"
