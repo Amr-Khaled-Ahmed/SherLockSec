@@ -5,10 +5,10 @@ no external services — everything runs on your machine with plain Python + reg
 
 Two modes:
 
-| Mode | When it runs | What it scans |
-|---|---|---|
-| **Incremental** (`post-commit` hook) | Automatically after every `git commit` | Only the diff of the commit you just made — fast |
-| **Full scan** (`--full` flag) | Manually, whenever you want | The entire working tree: source files, `.env`, `Dockerfile`, `docker-compose.yml`, dependency manifests, GitHub Actions workflows, and anything tracked in git that shouldn't be |
+| Mode                                 | When it runs                           | What it scans                                                                                                                                                                    |
+| ------------------------------------ | -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Incremental** (`post-commit` hook) | Automatically after every `git commit` | Only the diff of the commit you just made — fast                                                                                                                                 |
+| **Full scan** (`--full` flag)        | Manually, whenever you want            | The entire working tree: source files, `.env`, `Dockerfile`, `docker-compose.yml`, dependency manifests, GitHub Actions workflows, and anything tracked in git that shouldn't be |
 
 ---
 
@@ -43,7 +43,7 @@ language(s)/frameworks are in play (via manifest files like
 `requirements.txt`/`pyproject.toml`, `package.json`, `go.mod`, `Cargo.toml`,
 `pom.xml`/`build.gradle`, `composer.json`, `Gemfile` — with file-extension
 counting as a fallback), then checks your `.gitignore` against a rule set
-built for *that* stack instead of a generic list. Examples: a Python repo
+built for _that_ stack instead of a generic list. Examples: a Python repo
 gets checked for `__pycache__/`, `venv/`/`.venv/`, `*.pyc`, `*.egg-info/`; a
 Node repo gets checked for `node_modules/`, `dist/`, `npm-debug.log*`. On top
 of the language-specific rules, it always checks for `.env`, `*.pem`, and
@@ -58,7 +58,7 @@ Every finding comes with a **suggested fix**, and each is rated
 This tool does **not** check your dependencies against a real CVE/vulnerability
 database (like `pip-audit` or `npm audit` do) — that requires querying an
 online advisory database, which isn't possible while staying fully offline.
-Instead it flags *risky patterns* (unpinned versions, floating tags, insecure
+Instead it flags _risky patterns_ (unpinned versions, floating tags, insecure
 protocols) that increase your exposure to supply-chain risk. If you also want
 real CVE-level scanning, you can run these **separately, on demand** (they do
 require network access to query vulnerability databases):
@@ -99,7 +99,7 @@ bash /path/to/commit-guard/install.sh
 
 Git hooks are always executed through Git's bundled `sh.exe`, so the hook
 itself works fine even if you never open Git Bash directly — but the
-*installer* script (`install.sh`) is a bash script, so run it once via Git
+_installer_ script (`install.sh`) is a bash script, so run it once via Git
 Bash (Option A) or manually do the 3 copy steps yourself:
 
 ```powershell
@@ -164,4 +164,74 @@ overwrites the old copy.
 ```bash
 rm -rf .commit-guard
 rm .git/hooks/post-commit
+```
+
+```
+
+
+---
+
+
+1. Semgrep Registry Rules (الأفضل والأشمل)
+الوصف: أضخم وأحدث داتابيز مفتوحة المصدر للـ SAST.
+
+ماذا تغطي؟ OWASP Top 10 بالكامل، أخطاء الـ Logic Control، ثغرات معينة بكل لغة (Python, JS, Go...)، والـ Misconfigurations.
+
+كيف تستفيد منها؟ القواعد مخزنة في ملفات YAML منسقة على GitHub في مستودع semgrep-rules. يمكنك تحميل الملفات أو قراءة الـ Rules منها مباشرة.
+
+2. Gitleaks Rules (الأفضل للـ Secrets & API Keys)
+الوصف: القاعدة المعيارية (Industry Standard) لكشف الأسرار والـ Hardcoded Credentials.
+
+ماذا تغطي؟ تغطي أكثر من 150+ نوع من الـ Tokens والـ Keys (AWS, GCP, Stripe, JWT, Private Keys...).
+
+كيف تستفيد منها؟ قم بتحميل ملف gitleaks.toml من المستودع الرسمي الخاص بهم؛ يحتوي على كل الـ Regex patterns الجاهزة للكشف.
+
+3. Nuclei Templates (Code / SAST Category)
+الوصف: رغم أن Nuclei يشتهر بـ Dynamic Scanning، إلا أن لديهم قسمًا واسعًا من الـ Templates المخصصة لفحص الكود المصدري وكونفيج الحاويات (Docker / K8s).
+
+ماذا تغطي؟ Misconfigurations، ثغرات OWASP، والـ Sensitive File Exposure.
+
+كيف تستفيد منها؟ تحميل القواعد بصيغة YAML من projectdiscovery/nuclei-templates.
+
+4. Bandit Rulesets (مخصص لـ Python)
+الوصف: قاعدة البيانات الخاصة بأداة Bandit المشهورة لفحص كود البايثون.
+
+ماذا تغطي؟ eval / exec / SQLi / Pickle Deserialization / Weak Crypto / Subprocess Shell Injection.
+
+كيف تستفيد منها؟ القواعد متوفرة كـ Python Modules أو قائمة Regex ومفاهيم داخل المستودع الرسمي لـ Bandit.
+
+5. OWASP Coraza / CRS Rulesets
+الوصف: رغم أنها مصممة للـ WAF، إلا أن أنماط الـ Regex الخاصة بـ OWASP ModSecurity Core Rule Set (CRS) تعتبر داتابيز ضخمة لكشف أنماط الـ Injection والـ Path Traversal و XSS.1. Semgrep Registry Rules (الأفضل والأشمل)
+الوصف: أضخم وأحدث داتابيز مفتوحة المصدر للـ SAST.
+
+ماذا تغطي؟ OWASP Top 10 بالكامل، أخطاء الـ Logic Control، ثغرات معينة بكل لغة (Python, JS, Go...)، والـ Misconfigurations.
+
+كيف تستفيد منها؟ القواعد مخزنة في ملفات YAML منسقة على GitHub في مستودع semgrep-rules. يمكنك تحميل الملفات أو قراءة الـ Rules منها مباشرة.
+
+2. Gitleaks Rules (الأفضل للـ Secrets & API Keys)
+الوصف: القاعدة المعيارية (Industry Standard) لكشف الأسرار والـ Hardcoded Credentials.
+
+ماذا تغطي؟ تغطي أكثر من 150+ نوع من الـ Tokens والـ Keys (AWS, GCP, Stripe, JWT, Private Keys...).
+
+كيف تستفيد منها؟ قم بتحميل ملف gitleaks.toml من المستودع الرسمي الخاص بهم؛ يحتوي على كل الـ Regex patterns الجاهزة للكشف.
+
+3. Nuclei Templates (Code / SAST Category)
+الوصف: رغم أن Nuclei يشتهر بـ Dynamic Scanning، إلا أن لديهم قسمًا واسعًا من الـ Templates المخصصة لفحص الكود المصدري وكونفيج الحاويات (Docker / K8s).
+
+ماذا تغطي؟ Misconfigurations، ثغرات OWASP، والـ Sensitive File Exposure.
+
+كيف تستفيد منها؟ تحميل القواعد بصيغة YAML من projectdiscovery/nuclei-templates.
+
+4. Bandit Rulesets (مخصص لـ Python)
+الوصف: قاعدة البيانات الخاصة بأداة Bandit المشهورة لفحص كود البايثون.
+
+ماذا تغطي؟ eval / exec / SQLi / Pickle Deserialization / Weak Crypto / Subprocess Shell Injection.
+
+كيف تستفيد منها؟ القواعد متوفرة كـ Python Modules أو قائمة Regex ومفاهيم داخل المستودع الرسمي لـ Bandit.
+
+5. OWASP Coraza / CRS Rulesets
+الوصف: رغم أنها مصممة للـ WAF، إلا أن أنماط الـ Regex الخاصة بـ OWASP ModSecurity Core Rule Set (CRS) تعتبر داتابيز ضخمة لكشف أنماط الـ Injection والـ Path Traversal و XSS.
+
+
+
 ```
